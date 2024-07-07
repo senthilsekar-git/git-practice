@@ -1,0 +1,1044 @@
+AWS SOLUTIONS ARCHITECH-ASSOCIATE- SAA-C03
+
+    * What is AWS?
+        Amazon Web Services is an important cloud computing platform known for its wide service offerings.
+        Its launched on 2006.
+
+     * Region & services?
+
+     	AWS regions are separate geographical areas like US-West 1 (North California) and Asia South (Mumbai).
+
+     	* Global Services in AWS?
+     		IAM
+     		Route53
+     		Cloudfront
+     		AWS Global Accelerator (AGA)
+
+    * IAM- Identity and Access Management
+
+      		* Root only create the IAM user for seperate from others.
+			* Users or Groups can be assigned JSON documents called policies.
+			* these policies define the permissions of the user
+			* In AWS you will apply the Least Privilege principle: dont give more permissions than a user needs.
+			* IAM policy structure is JSON documents.
+
+    * IAM Password Policy-MFA
+        *MFA devices options
+			* Virtual MFA- Google Authenticator and Authy(Amazon)
+			* Universal 2nd factor(U2F)-Yubikey. its a 3rd party tool
+			* Hardware key Fob MFA device-Gemalto(3rd party)
+			* Hardware key Fob MFA device for AWS Govcloud(US)-SurepassID(3rd party)
+
+	* IAM user password policy-IAM->Account Settings->Edit
+			* Here we changed the password policy.
+			* setting MFA to root go to security credentials. it will go to root user MFA.
+			* for IAM user MFA, click the IAM user and below option to add the MFA.
+   
+    * How can user access AWS
+			* there are 3 types to access the AWS
+			* AWS management console(protected by password+MFA)
+			* AWS command line interface(CLI): protected by access keys
+			* AWS software Developer kit(SDK)-for code: protected ny access keys
+
+	* create Access key for IAM
+			* Go to IAM->user-> <username> -> create access key-> CLI->create and Download .csv file for backup.
+
+		Access key types:-
+			CLI
+			local code
+			third party services
+
+		*aws cli login via cmd
+				in cmd type aws configure
+				access key ID: 
+				secret Access key:
+				Default region:
+				Default output format[None]: just enter
+
+				Sample command: aws IAM list-users
+				Note: if list-users cmd shows empty user dont have any permissions
+
+	*AWS CloudShell: Region Availability
+		https://docs.aws.amazon.com/cloudshell/latest/userguide/supported-aws-regions.html
+			17 region have AWS Cloudshell
+			example: Asia mumbai
+	* AWS cloudshell login
+		In AWS dashboard click terminal option, it will open in new window.
+
+			in cloudshell type aws configure
+				access key ID: 
+				secret Access key:
+				Default region:
+				Default output format[None]: just enter
+
+				Sample command: aws IAM list-users
+				Note: if list-users cmd shows empty user dont have any permissions	
+
+				# echo "text" > sample.txt
+	* IAM Roles for services
+			common roles:
+				EC2 instance roles
+				lambda Function roles
+				Roles for cloudformation
+
+		* creating roles:
+			IAM->Roles->create role->select entity type->select service-> click next-> select policies->next->type role name-> click create role.
+
+	* IAM Security Tools
+
+		* IAM credentials report (Account level)- IAM->Access reports->credentials report->Download credentials report.
+			It will shows all users reports likes access key andf MFA is enabled or not.
+		* IAM Access Advisor(user level)-IAM->user->click user and click Access Advisor
+			It will shows the which permissions are granted to you and when it was accessed.
+
+	* IAM Guidelines & Best practices
+
+		* Don't use the root account, except AWS account setup
+		* One physical user=One AWS user
+		* Assign users and groups to assign permission to group
+		* create strong password policy
+		* use MFA compulsary
+		* create Roles for giving permissions to AWS services
+		Use Access keys for (CLI/SDK)
+		Audit permissions for IAM credentials report and Access Advisor
+		Never share IAM user list & Access keys to anyone
+
+* EC2 FUNDAMENTALS:
+		*AWS Budget
+		*EC2 sizing & Configuration for create the Instance?
+			operating system(Linux,windows,MAC OS)
+			How much compute power & cores (CPU)
+			How much RAM need
+			How much stroage space
+				*Network attcahed(EBS & EFS)
+				*hardware (EC2 instance store)
+			network card: speed of the card, public IP address
+			firewall rules:Security group
+			bootstrap script(configure at first launch): EC2 user data
+
+	EC2 user data: (Bootstrap)
+			Its possible to run bootstrap script for all instance
+			It means it will run only booting
+			It will run only once at instance start
+			EC2 user Data contains:-
+				*installing updates
+				*installing software
+				*Download comman files from internet
+				*anything we can do
+			It will run only root access
+	EC2 instance types-(https://aws.amazon.com/ec2/instance-types/)
+			general Purpose-T2.micro
+			compute optimized- CPU
+			memory optimized- RAM
+			Accelerated computing
+			Stroage optimized
+			HPC optimized
+			Instance Features
+			measuring Instance performance
+
+	EC2 security groups
+		Its fundamental of Firewall of AWS
+		they control how traffic control in or out in AWS instance
+		* it contain only allow rules.
+		* it contains allow IP or security groups.
+
+	EC2 security group modify
+		*EC2->security groups->inbound rule
+		modify the 22 port for ssh tesing
+
+	SSH commands on windows
+		ssh -i <pem key> ec2-user@10.113.32.44
+
+	EC2 instance connect
+		select the instance and connect opetion above and it will instance ID and username and public IP then click connect
+
+	Spot Fleet and Spot Block
+		Spot fleet are stop the instance they reach max cost or capacity(sizing.eg-m5.large)
+
+	Spot fleet setting
+		EC2->instance below->spot request->request spot request
+	
+EC2 Solution Architect Associate Level:-
+
+	Private vs Public IP
+		IPV4 allows for 3.7 billion different address in the public spaces.
+	Elastic IP
+		You can have only 5 Elastic IP in your Account. (if you need more ask AWS)
+		EC2 dashboard->Network & Security below Elastic IPs->click to create after created click associate to instance.
+
+	Placement Groups:-
+		When you create the placement group, you need to specify the follwing groups. under EC2 dashboard->Network & Security below placement groups is there.
+
+			Cluster- Cluster instances into a low-latency group in a single Avalibilty zone
+
+			Spread-Speard instance across underlying hardware( Max 7 instance  per groups per AZ)- critical applications
+
+			Partition-  Spread instance across many different partitions(which rely on different set of racks) withinan AZ. Scales to 100s of EC2 instance per group(hadoop,cassendra,kafka)
+
+
+	ENI-Elastic Network Interface
+
+		logical component in a VPC that represents a Virtual Network card.
+		
+		ENI extra readings
+			https://aws.amazon.com/blogs/aws/new-elastic-network-interfaces-in-the-virtual-private-cloud/
+
+	EC2 Hibernate
+
+		We know instance able to stop / terminate
+			* Stop- the data on disk (EBS)is kept and intact of next restart
+			* Terminate- Any EBS volumes (root) also set-up to be destroyed is lost
+
+			In Hibernate means RAM is preserved (hold)state
+			under the hood :RAM state is written file to root EBS volume
+			This root EBS volume must be encrypted. once we hibernate it create the additional RAM hold state and instance will stopped. 
+			after start the instance writtened root EBS volume started.
+		Uses for:-
+			Long running process
+			saving the RAM state
+			services take time to start
+
+			* not hibernate for more than 60 days
+		Spin the instance with encrypt the volume and click advanced to hibernate mode on.
+
+
+	VPC-Virtual private cloud
+	CIDR-classless Inter-Domain Routing=A method for allocating the IP address. used in security groups
+
+	check the IP calculator: https://www.ipaddressguide.com/cidr
+
+	VPC create:
+
+		In VPC services click create VPC->name it-> put IP range-> Tenacy is default then create VPC.
+				Tenacy is dedicated means its high cost.
+
+		Subnet create:
+		 Select your VPC then create subnet.
+
+		 Select VPC ID->Name it publicsubnetA->select AZ->ipv4 subnet CIDR block put IP-> then create
+
+		 * if you need 2 public and 2 private means you can create the add new subnet option.
+
+	*No internet only come.not able to SSH without creating the routetable and IGW.
+
+Route Tables
+	
+		click create route table->name it public->select VPC->then create
+		click create route table->name it private->select VPC->then create
+
+	After that click pubilc Route table then select the subnet association then select the public subnets.
+	After that click private Route table then select the subnet association then select the private subnets.
+
+then click the public route table below click route->edit route->add route->0.0.0.0/0 (it means any ip allows)->select internet gateway->select your IGW->save
+
+
+
+Internet gateway(IGW)
+	 click the create IGW->name it->create.
+	 after attch the our VPC group
+
+
+Bastion hosts:-
+
+	Its designed for private network
+	first we connect ssh to bastion instance then via our private instance.(important)
+Bastion host security groups must allow inbound from the internet on port 22 from restricted CIDR, for example the public CIDR of your corporation
+
+Security groups of the EC2 instances must allow the security group of the bastion host, or the private IP of the bastion host.
+
+*create the instance named privateinstance->select key pair->network setting edit->select our VPC->subnet to our private->create security group named as private->inbound security rules->source type custom->select private security group->launch instance.
+
+connect the bastion instance and do ssh our private instance
+		
+		ssh ec2-user@10.0.1.72
+	 
+	 * if not working create the file called demokey.pem and paste your keypair inside.eg: vi demokey.pem
+	 then give permission to:- chmod 0400 demokey.pem
+
+	 then 
+
+	 	ssh ec2-user@10.0.1.72 -i demokey.pem
+
+	 * now its connected without internet.do the NAT for internet.
+
+NAT-network Address Translation
+
+	create the new instance called NATinstance->select NAT AMI(OS)->keypair->network settings edit->select our VPC->subnet public->named security group called NATSG->add inbound ssh,http,https custom IP 10.0.0.0/16->create instance.
+
+	Then
+
+		click NATinstance->edit action->select network->Change Source / destination check->then stop the Source / destination checking->save
+
+		Then
+			go to route table->select private route->route->edit route->add->0.0.0.0/0 then select instance->select natinstance->save
+
+			Then do ping google.com, if its not working select the NAT instance->security->inbound rule->add ALL ICMP IPV4->save.
+
+NAT gateways:-
+	
+	AWS managed NAT, higher bandwidth, high availablity and no administration 
+	pay per hour for usage and bandwidth
+	NATGW is created in a specific AZ, uses the Elastic IP.
+	Can't used by EC2 instance in the same subnet(only from other subnet)
+	Require to IGW(private subnet=> NATGW=>IGW) 
+	5 Gbps of bandwidth with automatic scaling up to 100 Gbps.
+	No security group to manage/ required.
+
+	VPC->NAT gateway->Create NATGW->Name it myNATGW->select subnet public->connectivity type public->click allocate Elastic IP->save
+
+	Then go to route table->click privateroute table_>action->edit routes->Add route->o.o.o.o/o-> target as select NATGW->save
+
+
+NACL-Network Access control List 
+	
+	NACL is like firewall which control traffic from and to subnets
+	One NACL per subnet, new subnet are assigned the default NACL
+	You define NACL rules,
+
+			Rules have numbers(1-32766) higher precedence with a lower number
+			first rule match will drive the decision
+			Example: if you define #100 ALLOW 10.0.0.10/32 and #200 DENY 10.0.0.10/32, the IP address will be allowed, because 100 is higher precedence over 200
+			The last rule is an asterisk (*) and denies the request in case of no rule match
+			AWS recommands adding rules by increment of 100
+	newly created NACL will deny everything
+	NACL are great way of blocking a specific IP address  at the subnet level.
+
+Default NACL:-
+	Do not modify the Default NACL,instead create custom NACLs
+	It's accepts everything inbound/outbound with the subnets its's associated with. 
+
+
+
+CD and CP:-
+	CD- Code Deploy
+	CP-Code Pipeline
+
+	CDCP->AWS
+	CICD->Devops (Continues Intergration and Continues Deployment)
+
+	DEVOPS=>code->GIT->jenkins->Docker->Server(APP Host)
+
+	AWS  => code->S3-->CP------->CD------>SERVER(App host)
+
+	First Create IAM role EC2 to S3 full access
+
+	IAM->role->create role->below service or use case select EC2->next->Select S3Fullaccess permission->Rolename as EC2-S3_Fullaccess->save
+
+	Second create IAM role code deploy
+
+	IAM->role->create role->below service or use case select code deploy->select peermission->next->name it code_deploy->save
+
+	Create 2 instance> One is dev with HTTPS,HTTP,SSH. 2nd is Production same HTTPS,HTTP,SSH.
+
+	attach the EC2-S3_Fullaccess IAM role to production server.
+
+		connect production server and install below
+
+				# yum update
+# yum install ruby -y
+# yum install wget -y
+# wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
+# chmod +x install
+# ./install auto
+# service codedeploy-agent status
+
+Then
+
+connect dev instance
+
+Create directory mkdir -p Deployemnt/Sampleapp
+
+create html file. vi index.html
+cat index.html=> this is senthil
+
+vi appspec.yml
+version: 0.0
+os: linux
+files:
+ - source: /index.html
+   destination: /var/www/html/
+hooks:
+ BeforeInstall:
+  - location: scripts/httpd_install.sh
+    timeout: 300
+    runas: root
+  - location: scripts/httpd_start.sh
+    timeout: 300
+    runas: root
+ ApplicationStop:
+  - location: scripts/httpd_stop.sh
+    timeout: 300
+
+
+    Then 
+    #mkdir script
+    #chmod +x *
+    #vi httpd_install.sh==>#!/bin/bash
+							yum install -y httpd
+
+	#vi httpd_start.sh==>#!/bin/bash
+							systemctl start httpd
+							systemctl enable httpd
+	
+	#vi httpd_stop.sh==>#!/bin/bash
+						systemctl stop httpd
+						systemctl disable httpd
+
+create S3 bucket:-
+
+Go to dev instance connect->type aws configure
+
+							enter access key and secret key
+
+			then go to AWS code deploy service check if any application is there. if not create
+
+				#aws deploy create-application --application-name sampleapp
+
+				#aws deploy push --application-name sampleapp --s3-location s3://codedeploy098/sampleapp.zip
+
+				 Now S3 file created
+
+			code dep;oy->deployment group->name it->select our role->in-place->select aws EC instance->type tag name->disable Loand balane->crate deployement froup
+
+		create deployemnt-<name it deploy->select s3 bucket->create deployment
+
+Go to EC2 prod and copy public IP and paste in browser
+
+Then automation purpose create code pipeline (CP)
+
+	below code deploy click code pipeline
+
+	create  pipeline->name it cpp->excution mode to V2->service role to new service role->role name->next source provider amazon S3->select bucket->select s3 object key as s3 bucket name->select code pipeline->next->skip the build provider->next->deploy provider as AWS codedepoly->Region->Application name->Deployment group->next->create
+
+	any cahnges repush the code to bucket made cahnge and zip it
+	#zip -r ../sampleapp.zip .
+	#aws s3 cp sampleapp.zip s3://codedeploy098
+
+
+EBS- ELastic Block storage:-
+
+		An EBS(ELastic Block storage) volume is a network drive you can attach this drive while you can spin the instance. (eg: additional disk)
+
+		It allows your instnace to persisit evan after the instance termination
+		they can only be mounted  to one instance at a time. like CCP
+		they are bounded to specfic AZ.
+
+
+		Analogy: thing of them network USB stick
+		Free Tier: 30GB of free EBS stroage of type general purpose (SSD) or Megnatic per month
+
+	EBS Volume:-
+
+		to create new EBS volume click EBS block store and create ans select AZ.and attach.
+		If you select another AZ unable to attach.
+
+
+		* It's a network drive.Not the physical drive
+			it uses the network to communicate the instance, which means there might be a bit of latency.
+			It can be detached from EC2 instance and attached to another one quickly
+
+
+
+		* It's locked to AZ.
+			An EBS volume is us-east-1  a cannot be attached  to us us-east-2
+			To move the volume across, you firsyt need to snapshot it.
+
+		* have aprovisioned capacity(Size in GB and IOPS)
+			you get billed for all  the provisioned capacity
+			you can increase the capacity of the drive over time
+
+	EBS Delete on terminate Attribute
+
+		Controls the EBS behaviour when an EC2 instance terminates
+			by default, the root volume is deleted (attribute enabled)
+			by default, any other attached EBS volume is not deleted(attribute disabled)
+
+		This can be controlled by AWS cli/ AWS connect
+
+	Use case: preserve root volume when instance is terminated 
+
+
+EBS Snapshots:-
+
+		Make a backup snapshot of you EBS volume at a point in time
+		Not necessary to detach the volume  to do snapshot, but recommamdned
+		Can copy snapshots to across AZ or Region
+
+		Select the EBS volume->action->create snapshot->name it->create
+		then
+			Snapshot need copy on another AZ or region
+
+			Go to snapshot->select snap->action->copy snapshot->select zone.
+
+		If you want create the EBS volume from snapshot click snapshot->action->create volume from snapshot-> select any zone you want
+	Create Snapsnot recycelebin retention rule:-
+			click recyclebin from snap shot page and click Create retention rule->name it-> resiuce type EC2 snapshot->check Apply to all resources->Select Retention period->create
+
+			Note:before that you need to archieve the snapshot.
+
+
+EBS Snapshots Features
+ 	EBS Snapshot Archive
+		Move a Snapshot to an "archive tier" that is 75% cheaper
+		Takes within 24 to 72 hours for restoring the archive
+
+Recycle Bin for EBS Snapshots
+		Setup rules to retain deleted snapshots so you can recover them after an accidental deletion 
+		Specify retention (from I day to I year)
+
+Fast Snapshot Restore (FSR)
+	Force full initialization of snapshot to have no latency on the first use ($$$)
+
+
+AMI-Amazon machine Image
+	Its a customization of an EC2 instnace
+
+	AMI type:-
+
+		Public AMI-AWS provided
+		Your Own AMI- You customized
+		AWS Market place AMI- made by someone and sell to others
+
+	Select EC2 instance Youu need->Action->image and template->create image->name it-> create
+
+	After that create New instance with MY AMI/
+
+EC2 Instance Store
+    • EBS volumes are network drives with good but "limited" performance 
+      If you need a high-performance hardware disk, use EC2 Instance Store 
+
+Better I/O performance
+EC2 Instance Store lose their storage if they're stopped (ephemeral) 
+Good for buffer/cache/scratch data / temporary content
+Risk of data loss if hardware fails
+Backups and Replication are your responsibility
+
+EBS Volume Types
+
+	EBS Volumes come in 6 types
+		gp2/gp3 (SSD): General purpose SSD volume that balances price and performance for a wide variety of workloads
+		iol / io2 Block Express (SSD): Highest-performance SSD volume for mission-critical low-latency or high-throughput workloads
+		stl (HDD): Low cost HDD volume designed for frequently accessed, throughput- intensive workloads
+		scl (HDD): Lowest cost HDD volume designed for less frequently accessed workloads
+		EBS Volumes are characterized in Size | Throughput | IOPS (I/O Ops Per Sec)
+		When in doubt always consult the AWS documentation - it's good!
+	• Only gp2/gp3 and io 1/i02 Block Express can be used as boot volumes
+
+EBS Volume Types Use cases 
+Provisioned IOPS (PIOPS) SSD
+
+	• Critical business applications with sustained IOPS performance
+	• Or applications that need more than 16,000 IOPS
+	• Great for databases workloads (sensitive to storage perf and consistency)
+	•iol (4 GiB - 16 TiB):
+		Max PIOPS: 64,000 for Nitro EC2 instances & 32,000 for other
+		Can increase PIOPS independently from storage size
+	io2 Block Express (4 GiB – 64 TiB)
+		Sub-millisecond latency
+		Max PIOPS: 256,000 with an IOPS:GIB ratio of 1,000:1
+
+	Supports EBS Multi-attach
+
+
+EBS Multi-Attach – io 1/io2 family
+
+	• Attach the same EBS volume to multiple EC2 instances in the same AZ
+	Each instance has full read & write permissions to the high-performance volume
+
+Use case:
+	Achieve higher application availability in clustered Linux applications (ex: Teradata)
+	Applications must manage concurrent write operations
+	Up to 16 EC2 Instances at a time
+	Must use a file system that's cluster-aware (not XFS, EXT4, etc...)
+
+
+EBS Encryption
+
+	•When you create an encrypted EBS volume, you get the following:
+		Data at rest is encrypted inside the volume
+		All the data in flight moving between the instance and the volume is encrypted
+		All snapshots are encrypted
+		All volumes created from the snapshot
+Encryption and decryption are handled transparently (you have nothing to do)
+Encryption has a minimal impact on latency
+EBS Encryption leverages keys from KMS (AES-256)
+Copying an unencrypted snapshot allows encryption
+Snapshots of encrypted volumes are encrypted
+
+
+Amazon EFS - Elastic File System
+	•Managed NFS (network file system) that can be mounted on many EC2
+	•EFS works with EC2 instances in multi-AZ
+	•Highly available, scalable, expensive (3x gp2), pay per use
+
+	go to EFS click create->name it->select VPC->customize->create.then add EFS with new instance
+
+
+EBS vs EFS - Elastic Block Storage
+
+EBS volumes:-
+	one instance (except multi-attach iol/i02) 
+ 	are locked at the Availability Zone (AZ) level
+ 	gp2: 10 increases if the disk size increases 
+	gp3 & iol: can increase IO independently
+
+To migrate an EBS volume across AZ 
+	• Take a snapshot
+	• Restore the snapshot to another AZ
+	• EBS backups use IO and you shouldn't run them while your application is handling a lot of traffic
+
+Root EBS Volumes of instances get terminated by default if the EC2 instance gets terminated. (you can disable that)
+
+
+EBS vs EFS - Elastic File System
+		Mounting 100s of instances across AZ 
+		EFS share website files (WordPress) 
+		Only for Linux Instances (POSIX)
+		EFS has a higher price point than EBS 
+		Can leverage Storage Tiers for cost savings
+		Remember: EFS vs EBS vs Instance Store
+
+
+
+High Availablity & Scalability: ELB & ASG
+
+	ELB=Elastic Load balancer
+	ASG=Auto Scalaling
+
+	•Scalability means that an application / system can handle greater loads by adapting.
+
+	There are two kinds of scalability:
+		·Vertical Scalability
+		 Horizontal Scalability (= elasticity)
+
+	Scalability is linked but different to High Availability
+	Let's deep dive into the distinction, using a call center as an example
+
+
+
+Vertical Scalability
+	Vertically scalability means increasing the size of the instance
+	For example, your application runs on a t2.micro
+	Scaling that application vertically means running it on a t2.large
+	Vertical scalability is very common for non distributed systems, such as a database.
+	RDS, ElastiCache are services that can scale vertically.
+	There's usually a limit to how much you can vertically scale (hardware limit)
+
+
+Horizontal Scalability
+	Horizontal Scalability means increasing the number of instances / systems for your application
+	Horizontal scaling implies distributed systems. This is very common for web applications / modern applications
+	It's easy to horizontally scale thanks the cloud offerings such as Amazon EC2
+
+
+
+High Availability & Scalability For EC2
+	
+	•Vertical Scaling: Increase instance size (= scale up / down)
+	•From: t2.nano - 0.5G of RAM, I VCPU
+	To: u-12tb1.metal – 12.3 TB of RAM, 448 vCPUs
+
+Horizontal Scaling: Increase number of instances (= scale out / in)
+	·Auto Scaling Group
+	•Load Balancer
+High Availability: Run instances for the same application across multi AZ
+	•Auto Scaling Group multi AZ
+	 Load Balancer multi AZ
+
+
+
+What is load balancing?
+	Load Balances are servers that forward traffic to multiple servers (e.g., EC2 instances) downstream
+
+Why use a load balancer?
+	Spread load across multiple downstream instances 
+	Expose a single point of access (DNS) to your application 
+	Seamlessly handle failures of downstream instances
+	Do regular health checks to your instances
+	Provide SSL termination (HTTPS) for your websites 
+	Enforce stickiness with cookies
+	High availability across zones
+	Separate public traffic from private traffic
+
+
+Why use an Elastic Load Balancer?
+	
+	An Elastic Load Balancer is a managed load balancer
+		AWS guarantees that it will be working
+		AWS takes care of upgrades, maintenance, high availability
+		AWS provides only a few configuration knobs
+
+	It costs less to setup your own load balancer but it will be a lot more effort on your end
+
+	It is integrated with many AWS offerings / services
+		EC2, EC2 Auto Scaling Groups, Amazon ECS
+		AWS Certificate Manager (ACM), CloudWatch
+		Route 53, AWS WAF, AWS Global Accelerator
+			
+
+
+Types of load balancer on AWS
+
+		AWS has 4 kinds of managed Load Balancers
+				Classic Load Balancer (vl - old generation) - 2009 - CLB 
+					HTTP, HTTPS, TCP, SSL (secure TCP)
+				Application Load Balancer (v2 - new generation) - 2016-ALB
+					HTTP, HTTPS, WebSocket
+				Network Load Balancer (v2 - new generation) - 2017 - NLB 
+					TCP, TLS (secure TCP), UDP
+				Gateway Load Balancer - 2020 - GWLB
+					Operates at layer 3 (Network layer) - IP Protocol
+				Overall, it is recommended to use the newer generation load balancers as they provide more features
+				Some load balancers can be setup as internal (private) or external (public) ELBs
+
+	Application Load Balancer (v2) Good to Know
+       •Fixed hostname (XXX.region.elb.amazonaws.com)
+           
+           The application servers don't see the IP of the client directly
+       			The true IP of the client is inserted in the header X-Forwarded-For
+       			We can also get Port (X-Forwarded-Port) and proto (X-Forwarded-Proto)
+       			It support micro service application
+
+  				
+  				 7 Layers of the OSI Model
+
+		Application=> End User layer
+					  • HTTP, FTP, IRC, SSH, DNS
+
+		Presentation=>Syntax layer
+						 SSL, SSH, IMAP, FTP, MPEG, JPEG
+
+		Session======>Synch & send to port
+						• API's, Sockets, WinSock
+
+		Transport====>End-to-end connections TCP, UDP
+
+		Network======>Packets
+						IP, ICMP, IPSec, IGMP
+		Data Link====>Frames
+						• Ethernet, PPP, Switch, Bridge
+		Physical=====>Physical structure
+						• Coax, Fiber, Wireless, Hubs, Repeaters
+
+
+Create CLB
+	step1=ELB
+	step2= Launch Template
+	step3=ASG
+
+STEP:1: ELB->create CLB->name it->Scheme internet facing->Network mapping select default vpc or your VPC->Mapping selevct all zones->Security group create ALL TCP group(Inbound ALL TCP ipv4, outbound All traffic)->Listeners and routing select http->Health checks give correct path name->click Advance health check select Response timeout 2 sec,Interval 5 sec,Unhealthy threshold 2, Unhealthy threshold 10->Attribute tick Enable cross-zone load balancing and Enable connection draining-> Timeout (draining interval) 60 sec->create
+
+STEP:2: Launch Template->create Launch Template->Name it->select Auto Scaling guidance->select OS and tier->select instnace type t2.micro->key pair->Network settings  subnet leave it->Select existing security group as ALL TCP->click advanced and enter the script in boot strap->create 
+
+STEP:3: ASG->create ASG-Name it->Launch template select our template->next->select VPC and all zones->next->select Attach to an existing load balancer->Attach to an existing load balancer select Choose from Classic Load Balancers and select->next->Desired capacity 2->scaling limits  min 1 and max 4->create
+
+
+
+
+Create ALB
+	step1=Target group
+	step2=ELB
+	step3= Launch Template
+	step4=ASG
+
+STEP:1: Target Group->Choose a target type as instance->Target group name name it->Protocol : Port HTTP->IP address type IPV4->VPC default->Health check protocol HTTP->Health check path /->click Advanced health check setting->Health check port select traffic port->Healthy threshold 2->Unhealthy threshold 2->Timeout 2->Interval 5 sec->next->Register targets select all instance->create
+
+	ELB, Launch Template and ASG Same as above. but you need to specify the health check path name
+
+NLB=Network Load Balancer (V2)
+
+		Network load balancers (Layer 4) allow to: 
+			Forward TCP & UDP traffic to your instances 
+			Handle millions of request per seconds
+			Less latency~100 ms (vs 400 ms for ALB)
+		NLB has one static IP per AZ, and supports assigning Elastic IP (helpful for whitelisting specific IP)
+		NLB are used for extreme performance, TCP or UDP traffic
+		Not included in the AWS free tier
+
+	create NLB:-
+		step1=Target group
+		step2=ELB
+		step3= Launch Template
+		step4=ASG
+
+GLB=gateway Load balancer
+		GLB uses GENEVE protocol on port 6081
+
+Sticky session for Load balancer:-
+		
+		We able configure same client was access the same EC2 for LB concept.
+		Its called sticky.It works for ALB,GLB,CLB
+		We need cookie for enable this stickiness        Note: NLB works without cookies
+
+
+Sticky Sessions - Cookie Names
+
+	•Application-based Cookies
+
+	 ·Custom cookie
+		•Generated by the target
+		•Can include any custom attributes required by the application
+		•Cookie name must be specified individually for each target group
+		•Don't use AWSALB, AWSALBAPP, or AWSALBTG (reserved for use by the ELB) 
+
+		Application cookie
+			·Generated by the load balancer
+			•Cookie name is AWSALBAPP
+
+	Duration-based Cookies
+		·Cookie generated by the load balancer
+		•Cookie name is AWSALB for ALB, AWSELB for CLB
+
+Create Stickiness:-
+	Go to target group->select target group and Action->edit attributes->Load balancing algorithm round robin->enable stickiness->Stickiness type LBgenerate->save changes
+
+
+	CROSS ZONE LOAD BALANACER:--
+
+			Go to Load balancer->open any LB->attribute->edit and enable the Cross-zone load balancing->save changes.
+
+
+			Note: InApplication LB Cross-zone load balancing are default is on state. Unable to off once created the ALB.
+
+					but go to the Target group which is connected in ALB->attribute edit->inherit->off->save changes
+
+
+SSL certificates:-
+
+SSL/TLS-Basics
+		
+		•An SSL Certificate allows traffic between your clients and your load balancer to be encrypted in transit (in-flight encryption)
+		SSL refers to Secure Sockets Layer, used to encrypt connections
+		TLS refers to Transport Layer Security, which is a newer version
+		Nowadays, TLS certificates are mainly used, but people still refer as SSL
+		Public SSL certificates are issued by Certificate Authorities (CA) 
+		Comodo, Symantec, GoDaddy, GlobalSign, Digicert, Letsencrypt, etc...
+		SSL certificates have an expiration date (you set) and must be renewed
+
+		The Load balancer uses the X.509 certifictes (SSL/TLS server certificate)
+		You ca manage certificate using ACM (AWS certificate manager)
+		Clents use SNI (Server Name Indication) to specify the hostname they reach
+
+
+
+Elastic Load Balancers - SSL Certificates
+		•Classic Load Balancer (vl)
+				Support only one SSL certificate
+				Must use multiple CLB for multiple hostname with multiple SSL certificates
+		Application Load Balancer (v2)
+				Supports multiple listeners with multiple SSL certificates 
+				Uses Server Name Indication (SNI) to make it work
+		Network Load Balancer (v2)
+				Supports multiple listeners with multiple SSL certificates
+				Uses Server Name Indication (SNI) to make it work
+
+Click LB->click Listeners->add Listeners->select protocol->TLS/SSL certificate->select fromACM or import->save
+
+
+
+Connection Draining
+·
+Feature naming
+	Connection Draining - for CLB 
+	Deregistration Delay - for ALB & NLB
+Time to complete "in-flight requests" while the instance is de-registering or unhealthy
+Stops sending new requests to the EC2 instance which is de-registering
+Between I to 3600 seconds (default: 300 seconds)
+Can be disabled (set value to 0)
+Set to a low value if your requests are short
+
+RDS=Relational Database service
+		
+		It's a managed DB service for DB use SQL as a query language.
+		It allows you to create databases in the cloud that are managed by AWS Postgres MySQL
+			• MariaDB
+			• Oracle
+			• Microsoft SQL Server
+			• IBM DB2
+			Aurora (AWS Proprietary database)
+
+
+Advantage over using RDS versus deploying DB on EC2
+
+	RDS is a managed service:
+
+		Automated provisioning, OS patching
+		Continuous backups and restore to specific timestamp (Point in Time Restore)!
+		Monitoring dashboards
+		Read replicas for improved read performance
+		Multi AZ setup for DR (Disaster Recovery) 
+		Maintenance windows for upgrades 
+		Scaling capability (vertical and horizontal) 
+		Storage backed by EBS (gp2 or iol)
+	BUT you can't SSH into your instances
+
+
+RDS - Storage Auto Scaling
+
+	Helps you increase storage on your RDS DB instance dynamically
+	When RDS detects you are running out of free database storage, it scales automatically
+	Avoid manually scaling your database storage
+	You have to set Maximum Storage Threshold (maximum limit for DB storage)
+	Automatically modify storage if:
+		Free storage is less than 10% of allocated storage Low-storage lasts at least 5 minutes
+		6 hours have passed since last modification
+	Useful for applications with unpredictable workloads
+	Supports all RDS database engines
+
+RDS Multi-AZ (Diaster Recovery)
+	 SYNC replication
+	 One DNS name - automatic app failover to standby
+	 Increase availability
+	 Failover in case of loss of AZ, loss of network, instance or storage failure 
+	 No manual intervention in apps 
+	 Not used for scaling
+
+ Note: The Read Replicas be setup as Multi AZ for Disaster Recovery (DR)
+
+ RDS single AZ to Multi AZ
+
+ 		Zero downtime operation (no need to stop the DB)
+		Just click on "modify" for the database
+
+		The following happens internally:
+·			A snapshot is taken
+			A new DB is restored from the
+			snapshot in a new AZ
+			Synchronization is established between the two databases
+
+Create database->Choose a database creation method-standard create->select Engine options mysql->choose version->chosse Templates production->Availability and durability as Single DB instance->DB instance identifier database-1->Credentials Settings username as admin->self managed->set password->Instance configuration->select Burstable classes (includes t classes)->select db.t3.micro->Storage type General purpose SSD GP2->Storage autoscaling  enable->Maximum storage threshold 1000->Connectivity ->select dont Connect to an EC2 compute resource->public access yes->VPC security group (firewall) create new vpc->name it->Database port 3306->Database authentication as password ->Additional configuration->Initial database name name it->enable backup 7 days->backup windows as no preperence->log exports->enable Deletion protection->create database
+
+use sql electron application chieck the DB.
+download link: https://github.com/sqlectron/sqlectron-gui/releases/tag/v1.38.0
+
+Create read replica
+	select DB->action->Create read replica->
+
+
+RDS Custom
+	Managed Oracle and Microsoft SQL Server Database with OS and database customization
+	RDS: Automates setup, operation, and scaling of database in AWS 
+	Custom: access to the underlying database and OS so you can 
+		  Configure settings
+		  Install patches
+		  Enable native features
+		  Access the underlying EC2 Instance using SSH or SSM Session Manager
+	•De-activate Automation Mode to perform your customization, better to take a DB snapshot before
+RDS vs. RDS Custom
+	RDS: entire database and the OS to be managed by AWS
+	RDS Custom: full admin access to the underlying OS and the database
+
+Amazon Aurora Creation:-
+	
+	create database->Choose a database creation method as Standard create->select Aurora mysql->select version->chosse Templates production->DB instance identifier database-2->Credentials Settings username as admin->self managed->set password->Cluster storage configuration->select Aurora Standard->Instance configuration->select Burstable classes (includes t classes)->select db.t3.medium>Availability & durability->Create an Aurora Replica or Reader node in a different AZ->Connectivity ->select dont Connect to an EC2 compute resource->network type ipv4->public access->VPC security group (firewall) create new vpc->name it->Database port 3306->Additional configuration->Initial database name name it->nable backup 7 days->backup windows as no preperence->log exports->enable Deletion protection->create database
+
+Amazon RDS Proxy
+
+	Fully managed database proxy for RDS
+	Allows apps to pool and share DB connections established with the database
+	Improving database efficiency by reducing the stress on database resources (e.g., CPU, RAM) and minimize open connections (and timeouts) 
+	Serverless, autoscaling, highly available (multi-AZ) 
+	Reduced RDS & Aurora failover time by up 66% 
+	Supports RDS (MySQL, PostgreSQL, MariaDB, MS SQL Server) and Aurora (MySQL, PostgreSQL) 
+	No code changes required for most apps
+	Enforce IAM Authentication for DB, and securely store credentials in AWS Secrets Manager
+	RDS Proxy is never publicly accessible (must be accessed from VPC)
+
+
+
+Amazon ElastiCache:-
+
+	•The same way RDS is to get managed Relational Databases... 
+	 ElastiCache is to get managed Redis or Memcached
+	·Caches are in-memory databases with really high performance, low latency
+	Helps reduce load off of databases for read intensive workloads 
+	Helps make your application stateless
+	AWS takes care of OS maintenance / patching, optimizations, setup, configuration, monitoring, failure recovery and backups
+	Using ElastiCache involves heavy application code changes
+
+ElastiCache - Redis vs Memcached
+
+					REDIS
+	Multi AZ with Auto-Failover
+	Read Replicas to scale reads and have high availability
+	Data Durability using AOF persistence
+	Backup and restore features
+	Supports Sets and Sorted Sets
+
+					MEMCACHED
+	Multi-node for partitioning of data (sharding)
+	No high availability (replication) • Non persistent
+	No backup and restore Multi-threaded architecture
+
+Create Elastic cache-Redis cache:-
+
+go to Elastic cache->create select redis->Deployment option Design your own cache->Creation method Cluster cache->Cluster mode disabled->Cluster info name it->Location AWS Cloud->enable Auto-failover->Cluster settings select Node type cahe.t2.micro->Subnet group settings create new->name it->next->
+
+
+Route53:-
+
+	What is DNS?
+		Domain Name System which translate the human friendly hostname into ip addresses.
+			eg: www.google.com=>142.250.193.142
+
+	DNS Terminologies
+		Domain Registrar: Amazon Route 53, GoDaddy,...
+ 		DNS Records: A, AAAA, CNAME, NS, ...
+		Zone File: contains DNS records
+		Name Server: resolves DNS queries (Authoritative or Non-Authoritative)
+		Top Level Domain (TLD): .com, .us, .in, .gov, .org, ..
+		Second Level Domain (SLD): amazon.com, google.com, ...
+
+
+Route 53 - Record Types
+	A - maps a hostname to IPv4
+	AAAA - maps a hostname to IPv6
+	CNAME – maps a hostname to another hostname
+		The target is a domain name which must have an A or AAAA record
+		Can't create a CNAME record for the top node of a DNS namespace (Zone Apex)
+		Example: you can't create for example.com, but you can create for
+			www.example.com
+	NS Name Servers for the Hosted Zone
+		·Control how traffic is routed for a domain
+
+Route53=Register Domain
+
+	Go to Route53->click register domain->name it domain name->proceed to check out->Domain pricing options disable the auto renew if you dont want->next->contact information->next->purchase
+
+Route53-EC2 setup
+
+first create 3 EC2 instance from different region
+and create ALB and inside create target group
+
+check all the instance and ALB DNS address is working on browser
+
+54.209.183.13 us-east-1
+18.143.65.155 ap-southeast-1
+13.126.185.48 ap-south-1
+
+Demoroute53-1786013866.us-east-1.elb.amazonaws.com
+
+Create record->sub domain name it->select zone IP->TTL timer 120 sec->create record
+
+* if i create record the sub domain like sekar.senthil.dhandapani@perficient.com(sekar is sub domain) if enter it in web it will access the entered zone EC2
+
+Routing policy:-
+
+Types:-Simple-while create record enter 2 or 3 zone ip, but responce getting from all ip's, but client choose only one
+
+	   Weighted-while create record time enter the weight as 70, it will come first.(high value come first
+
+	   Latency-while create record latency means it come first resonce which EC2 instance is near me
+
+	   Failover-While create record with failover we can mention which EC2 is primary, which is secondary
+	   Geolocation-while create record once we change the location it will connect the changed location like VPN
+	   Deoproximity-while create record we specify the bias value as 50 more user connect to bias 50 intance only. 
+	   IP based-client IP based
+	   Multi Value- it will get the responce from all servers
+	   
+
+
+Route 53 -Health Check
+
+create Health check->name it->enter the IP and hostname and path->next->create
+
