@@ -1,0 +1,34 @@
+create Infra for JU
+Jewelry_Unlimited_Prod-Web01
+
+1)Create VPC and security group for JU
+2) spin EC2->aws linux 3->c5.2xlarge->key pair->VPC_>subnet->assign public IP enable->security group->Select existing security group->storage 300 GB->termination production enable-> launch instance
+3)assign Elastic IP for Jewelry_Unlimited_Prod-Web01
+
+
+vi etc/nginx/nginx.conf
+etc/nginx/conf.d/php-fpm
+etc/nginx/default.d/php.conf
+vi /ect/security/limits.d/limits.conf
+cd /var/lib/php
+vi /etc/php-fpm.d/www.conf
+vi /etc/sysctl.conf
+vi /etc/php-fpm.conf
+vi /etc/php.ini
+
+
+SSM role for EC2
+https://www.pluralsight.com/cloud-guru/labs/aws/installing-and-configuring-ssm-agent-on-linux
+
+
+efs disk in fstab
+fs-091aea858e245e54f.efs.us-east-1.amazonaws.com:/ /mnt/efs nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0
+
+
+create symlink
+
+# Remove the existing catalog directory or symlink
+rm -rf /var/www/html/pub/media/catalog
+ 
+# Create the symbolic link
+ln -s /mnt/efs/ju_dev_catalog_files/catalog /var/www/html/pub/media/catalog
