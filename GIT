@@ -1,0 +1,104 @@
+GIT
+
+SCM=Source control Management
+VCS=Version control System
+	2 types VCS
+
+		1)CVCS=Centralized version control system
+		2)DVCS=Distributed version control system
+
+CVCS=Centralized version control system
+	Use a central server to strore all places
+	Once repositary crash all data will gone
+	We dont use this
+
+DVCS=Distributed version control system
+	System do not rely on central server
+	we can get the clone copy of repositary form main repositary
+	commit will work on locally
+
+Features of GIT
+	Free and open source
+	speed 
+	scalable
+	Reliable
+	Secure
+	Easy Branching
+
+
+	Senthilsekar2628@gmail.com
+	Prathipa@2628
+	username:senthilsekar-git
+
+	my repo URL: https://github.com/senthilsekar-git/git-practice.git
+
+	Need to create token-Settings-delveloper-classic token
+	 Token ID: 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
+
+
+	 #git init (this is for initilaize the git)
+	 #git add <filename> =then if we have any file we push this file to git
+
+	 then commit the file
+	 #git commit -m "name it" 
+
+	 #git commit -am "3rd commit" (-am means edit the same file and push to repo))
+
+	 Then log your git ID and mail ID
+
+	 #git config --global user.name "Your Name"
+     #git config --global user.email you@example.com
+
+     #git config --global user.name "senthilsekar-git"
+     #git config --global user.email senthilsekar2628@gmail.com
+
+ Then git push
+
+ 	 #git push <alias name> master
+ 	 eg:
+ 	 #git push AWS master
+ 	 after it ask the token then pushed your git hub
+ 	 
+ 	 Create banrches
+
+ 	 #git branch dev
+
+ 	 then move master to dev branch
+
+ 	 #git checkout dev
+
+
+ 	 merge the files to another branch
+
+ 	 # git merge <branch name>
+
+ 	 copy the all to another branch
+ 	 #git push --set-upstream AWS cloud
+
+ 	 check the files
+ 	 #git remote
+
+
+ 	 git smooth merge
+ 	 git merge-conflict
+
+ 	 git rebase commands
+ 	 	#git rebase master
+
+ 	 delete the branches
+ 	 	#git branch -d dev
+
+ 	 fork create from another repo
+
+ 	 git clone
+ 	 	#git clone <url>
+
+ 	 	eg: git clone https://github.com/senthilsekar-git/git-practice
+
+ 	 after clone then edit some files in cloned file then repush to git
+
+ 	 # git push origin dev
+
+ 	 #git cheery-pic <commit ID>
+
+
