@@ -1,0 +1,69 @@
+Prometheus & Grafana
+
+Prometheus-Server Based Monitoring Tool
+
+Grafana- Dash board Generating Tool $ Visulization
+
+Types of Engineering
+	server
+	storage
+	network
+	database
+	security
+	application
+
+Splunk VS Prometheus
+
+	Splunk: Log based monitoring Tool
+			Licensed tool. No free=60 days only trail
+			Master & slave concept
+			Both push & pull mechanism
+
+
+
+
+
+	Prometheus: server based monitoring tool
+				open source
+				Master & slave concept
+				master only pull mechanism
+				Node_Exporter(slave server) only store logs, master will pull the logs
+
+Prometheus timings:-
+		Scrap Timings- 15 sec to 60sec
+		Evaluation Timimngs-it will watch the scrap time is correctly working or not
+		Scrap Timeout-if logs does not pull means it will refresh the timings.
+						eg: min 15 sec,but it will check first 10sec la log pull pana try panala means ithu againg refresh pani vidum
+
+	TSDB- Time Series Data Base
+
+		create 2 servers name it prometheus master and Node_exporter
+
+		go to prometheus master and install the prometheus app in /opt folder
+		then copy prometheus and promtool script to /usr/local/bin folder
+		then run the prometheus.yml script in /opt/prometheus folder
+		#./prometheus --config.file=prometheus.yml &
+
+				go to browser:- ip:9090
+		Go to Node-exporter ans install node-exporter in /opt
+		then start node exporter
+		#./node_exporter &
+
+		then go to master prometheus.yml edit it add the node exporter IP and port number
+
+		Node exporter port: 9100
+
+		then kill the prometheus then start 
+		#./prometheus --config.file=prometheus.yml &
+
+		install grafana
+
+		in master server install grafana in /opt
+
+		then go to grafana folder:
+
+		then start ./grafana
+
+		then login browser IP:3000
+		username & passwrd Admin admin
+		
